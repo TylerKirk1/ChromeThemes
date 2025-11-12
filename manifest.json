@@ -1,0 +1,13 @@
+{
+  "manifest_version": 3,
+  "name": "Universal Dark Mode (Demo)",
+  "version": "1.0",
+  "description": "Applies a simple universal dark mode to all pages.",
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_end"
+    }
+  ]
+}
