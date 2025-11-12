@@ -1,0 +1,249 @@
+:root {
+  color-scheme: dark;
+  font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --popup-bg: #0f1117;
+  --popup-surface: #161a23;
+  --popup-surface-alt: #1f2430;
+  --popup-accent: #e2b714;
+  --popup-muted: #888d9c;
+  --popup-border: #262a36;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 380px;
+  max-width: 420px;
+  max-height: 600px;
+  background: radial-gradient(circle at top right, #1d2233, #0f1117);
+  color: #f6f8fb;
+  font-family: inherit;
+  padding: 1rem;
+  overflow-y: auto;
+}
+
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.eyebrow {
+  margin: 0;
+  text-transform: uppercase;
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  color: var(--popup-muted);
+}
+
+h1 {
+  margin: 0.2rem 0 0;
+  font-size: 1.3rem;
+}
+
+.site-pill {
+  padding: 0.35rem 0.75rem;
+  border: 1px solid var(--popup-border);
+  border-radius: 999px;
+  background: var(--popup-surface);
+  font-size: 0.8rem;
+  color: var(--popup-muted);
+  max-width: 40%;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  text-align: center;
+}
+
+.controls {
+  background: var(--popup-surface);
+  border: 1px solid var(--popup-border);
+  border-radius: 0.75rem;
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.scope-row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.scope-option {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.5rem;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  font-size: 0.85rem;
+  color: var(--popup-muted);
+  transition: border 0.2s ease, color 0.2s ease;
+}
+
+.scope-option.disabled {
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+.scope-option input {
+  accent-color: var(--popup-accent);
+}
+
+.scope-option input:checked + span,
+.scope-option input:checked ~ span {
+  color: #f6f8fb;
+  font-weight: 600;
+}
+
+.scope-option:has(input:checked) {
+  border-color: var(--popup-accent);
+}
+
+.ghost {
+  margin-left: auto;
+  padding: 0.3rem 0.6rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--popup-border);
+  background: transparent;
+  color: var(--popup-muted);
+  cursor: pointer;
+  font-size: 0.75rem;
+}
+
+.ghost:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.slider-block {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 0.5rem;
+  align-items: center;
+  font-size: 0.85rem;
+}
+
+.slider-block input[type="range"] {
+  width: 100%;
+  accent-color: var(--popup-accent);
+}
+
+.slider-value {
+  font-variant-numeric: tabular-nums;
+  color: var(--popup-accent);
+  font-weight: 600;
+}
+
+.search-row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.search-row input[type="search"] {
+  flex: 1;
+  border-radius: 0.6rem;
+  border: 1px solid var(--popup-border);
+  background: var(--popup-surface-alt);
+  color: #f6f8fb;
+  padding: 0.4rem 0.6rem;
+  font-size: 0.85rem;
+}
+
+.favorites-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.8rem;
+  color: var(--popup-muted);
+}
+
+.favorites-toggle input {
+  accent-color: var(--popup-accent);
+}
+
+.themes {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.theme-card {
+  position: relative;
+  border-radius: 0.9rem;
+  border: 1px solid var(--popup-border);
+  background: var(--popup-surface);
+  padding: 0.85rem;
+  transition: border 0.2s ease, transform 0.2s ease;
+  cursor: pointer;
+}
+
+.theme-card.active {
+  border-color: var(--popup-accent);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+.theme-card:hover {
+  transform: translateY(-2px);
+}
+
+.theme-card .favorite {
+  position: absolute;
+  top: 0.35rem;
+  right: 0.35rem;
+  border: none;
+  background: transparent;
+  color: var(--popup-muted);
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.theme-card .favorite.active span {
+  color: var(--popup-accent);
+}
+
+.swatches {
+  display: flex;
+  gap: 0.3rem;
+  margin-bottom: 0.5rem;
+}
+
+.swatch {
+  flex: 1;
+  height: 22px;
+  border-radius: 0.35rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.theme-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.theme-name {
+  margin: 0;
+  font-weight: 600;
+}
+
+.theme-desc {
+  margin: 0;
+  font-size: 0.78rem;
+  color: var(--popup-muted);
+}
+
+.empty-state {
+  text-align: center;
+  padding: 1rem;
+  color: var(--popup-muted);
+  border: 1px dashed var(--popup-border);
+  border-radius: 0.75rem;
+}

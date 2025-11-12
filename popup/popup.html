@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Monkeytype Universal Themes</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <div>
+        <p class="eyebrow">Monkeytype inspired</p>
+        <h1>Universal Themes</h1>
+      </div>
+      <div class="site-pill" id="sitePill">Loading…</div>
+    </header>
+
+    <section class="controls">
+      <div class="scope-row">
+        <label class="scope-option">
+          <input type="radio" name="scope" value="global" checked />
+          <span>Every site</span>
+        </label>
+        <label class="scope-option" id="siteScopeOption">
+          <input type="radio" name="scope" value="site" />
+          <span>This site only</span>
+        </label>
+        <button class="ghost" id="clearSiteTheme" title="Remove site override">
+          Reset
+        </button>
+      </div>
+
+      <label class="slider-block">
+        <span>Blend strength</span>
+        <input type="range" id="blendSlider" min="0.2" max="1" step="0.05" />
+        <span class="slider-value" id="blendValue">90%</span>
+      </label>
+
+      <div class="search-row">
+        <input
+          type="search"
+          id="themeSearch"
+          placeholder="Search themes"
+          aria-label="Search themes"
+        />
+        <label class="favorites-toggle">
+          <input type="checkbox" id="favoritesOnly" />
+          <span>Favorites only</span>
+        </label>
+      </div>
+    </section>
+
+    <section class="themes" id="themeGrid"></section>
+    <div class="empty-state" id="emptyState" hidden>
+      <p>No themes match your filter.</p>
+    </div>
+
+    <template id="themeCardTemplate">
+      <article class="theme-card">
+        <button class="favorite" title="Toggle favorite" aria-label="Toggle favorite">
+          <span>☆</span>
+        </button>
+        <div class="swatches">
+          <span class="swatch bg"></span>
+          <span class="swatch surface"></span>
+          <span class="swatch accent"></span>
+        </div>
+        <div class="theme-meta">
+          <p class="theme-name"></p>
+          <p class="theme-desc"></p>
+        </div>
+      </article>
+    </template>
+
+    <script type="module" src="popup.js"></script>
+  </body>
+</html>

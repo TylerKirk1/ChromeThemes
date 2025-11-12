@@ -1,0 +1,427 @@
+[
+  {
+    "id": "serika-dark",
+    "name": "Serika Dark",
+    "basedOn": "serika_dark",
+    "tone": "dark",
+    "description": "Muted charcoal inspired by the classic Serika caps with gold highlights.",
+    "colors": {
+      "background": "#323437",
+      "surface": "#424447",
+      "surfaceAlt": "#535457",
+      "border": "#5f6163",
+      "textPrimary": "#d1d0c5",
+      "textMuted": "#888780",
+      "accent": "#e2b714",
+      "accentSoft": "#a9933a"
+    }
+  },
+  {
+    "id": "serika",
+    "name": "Serika Light",
+    "basedOn": "serika",
+    "tone": "light",
+    "description": "Light ivory base with black-and-gold contrast pulled from the Serika day theme.",
+    "colors": {
+      "background": "#e1e1e3",
+      "surface": "#d1d1d3",
+      "surfaceAlt": "#bfbfc1",
+      "border": "#b0b0b1",
+      "textPrimary": "#323437",
+      "textMuted": "#7a7b7d",
+      "accent": "#e2b714",
+      "accentSoft": "#c9b35c"
+    }
+  },
+  {
+    "id": "phantom",
+    "name": "Phantom",
+    "basedOn": "phantom",
+    "tone": "dark",
+    "description": "Deep indigo night sky with electric blue neon cues.",
+    "colors": {
+      "background": "#1a1b26",
+      "surface": "#2c2d37",
+      "surfaceAlt": "#3f3f49",
+      "border": "#4c4d56",
+      "textPrimary": "#c0caf5",
+      "textMuted": "#7d839f",
+      "accent": "#7aa2f7",
+      "accentSoft": "#607ab7"
+    }
+  },
+  {
+    "id": "dracula",
+    "name": "Dracula",
+    "basedOn": "dracula",
+    "tone": "dark",
+    "description": "Classic Dracula contrast with lilac and cyan trims.",
+    "colors": {
+      "background": "#282a36",
+      "surface": "#393b46",
+      "surfaceAlt": "#4a4c56",
+      "border": "#575962",
+      "textPrimary": "#f8f8f2",
+      "textMuted": "#a1a19d",
+      "accent": "#bd93f9",
+      "accentSoft": "#9484d3"
+    }
+  },
+  {
+    "id": "nord",
+    "name": "Nord Midnight",
+    "basedOn": "nord",
+    "tone": "dark",
+    "description": "Fjord blues and cold air neutrals inspired by the Nord palette.",
+    "colors": {
+      "background": "#242933",
+      "surface": "#363a43",
+      "surfaceAlt": "#474b54",
+      "border": "#545860",
+      "textPrimary": "#88C0D0",
+      "textMuted": "#587d87",
+      "accent": "#88C0D0",
+      "accentSoft": "#60818f"
+    }
+  },
+  {
+    "id": "nord-light",
+    "name": "Nord Dawn",
+    "basedOn": "nord_light",
+    "tone": "light",
+    "description": "Frosted whites with teal accents for airy readability.",
+    "colors": {
+      "background": "#eceff4",
+      "surface": "#dbdee3",
+      "surfaceAlt": "#c9cbcf",
+      "border": "#b8babe",
+      "textPrimary": "#8fbcbb",
+      "textMuted": "#b6d3d3",
+      "accent": "#8fbcbb",
+      "accentSoft": "#7e9da8"
+    }
+  },
+  {
+    "id": "olivia",
+    "name": "Olivia",
+    "basedOn": "olivia",
+    "tone": "dark",
+    "description": "Soft noir background with rose gold highlights.",
+    "colors": {
+      "background": "#1c1b1d",
+      "surface": "#2e2d2f",
+      "surfaceAlt": "#403f41",
+      "border": "#4e4d4f",
+      "textPrimary": "#f2efed",
+      "textMuted": "#9d9b9a",
+      "accent": "#deaf9d",
+      "accentSoft": "#9d7c72"
+    }
+  },
+  {
+    "id": "magic-girl",
+    "name": "Magic Girl",
+    "basedOn": "magic_girl",
+    "tone": "light",
+    "description": "Playful pastel pinks and aquas for bright pages.",
+    "colors": {
+      "background": "#ffffff",
+      "surface": "#ededed",
+      "surfaceAlt": "#d9d9d9",
+      "border": "#c7c7c7",
+      "textPrimary": "#00ac8c",
+      "textMuted": "#59c9b4",
+      "accent": "#f5b1cc",
+      "accentSoft": "#c9cacf"
+    }
+  },
+  {
+    "id": "vaporwave",
+    "name": "Vaporwave",
+    "basedOn": "vaporwave",
+    "tone": "light",
+    "description": "Lavender haze background with synthwave gradients.",
+    "colors": {
+      "background": "#a4a7ea",
+      "surface": "#999bda",
+      "surfaceAlt": "#8b8ec7",
+      "border": "#8082b7",
+      "textPrimary": "#f1ebf1",
+      "textMuted": "#f6f2f6",
+      "accent": "#e368da",
+      "accentSoft": "#b572c7"
+    }
+  },
+  {
+    "id": "retro",
+    "name": "Retro Beige",
+    "basedOn": "retro",
+    "tone": "light",
+    "description": "Warm beige paper with dark coffee typography.",
+    "colors": {
+      "background": "#dad3c1",
+      "surface": "#cbc4b3",
+      "surfaceAlt": "#b9b3a4",
+      "border": "#aaa597",
+      "textPrimary": "#1d1b17",
+      "textMuted": "#6c6b68",
+      "accent": "#1d1b17",
+      "accentSoft": "#514d45"
+    }
+  },
+  {
+    "id": "carbon",
+    "name": "Carbon",
+    "basedOn": "carbon",
+    "tone": "dark",
+    "description": "Industrial graphite with ember orange accents.",
+    "colors": {
+      "background": "#313131",
+      "surface": "#414141",
+      "surfaceAlt": "#525252",
+      "border": "#5e5e5e",
+      "textPrimary": "#f5e6c8",
+      "textMuted": "#9f9682",
+      "accent": "#f66e0d",
+      "accentSoft": "#b36833"
+    }
+  },
+  {
+    "id": "laser",
+    "name": "Laser",
+    "basedOn": "laser",
+    "tone": "dark",
+    "description": "Neon cyan and magenta on a space purple base.",
+    "colors": {
+      "background": "#221b44",
+      "surface": "#342d53",
+      "surfaceAlt": "#453f62",
+      "border": "#534d6d",
+      "textPrimary": "#dbe7e8",
+      "textMuted": "#8e9697",
+      "accent": "#009eaf",
+      "accentSoft": "#536787"
+    }
+  },
+  {
+    "id": "metropolis",
+    "name": "Metropolis",
+    "basedOn": "metropolis",
+    "tone": "dark",
+    "description": "Teal glass and steel with night-sky blues.",
+    "colors": {
+      "background": "#0f1f2c",
+      "surface": "#22313d",
+      "surfaceAlt": "#35434e",
+      "border": "#44505a",
+      "textPrimary": "#e4edf1",
+      "textMuted": "#949a9d",
+      "accent": "#56c3b7",
+      "accentSoft": "#469ba0"
+    }
+  },
+  {
+    "id": "modern-dolch",
+    "name": "Modern Dolch",
+    "basedOn": "modern_dolch",
+    "tone": "dark",
+    "description": "Cool greys with seafoam accents.",
+    "colors": {
+      "background": "#2d2e30",
+      "surface": "#3e3f41",
+      "surfaceAlt": "#4f4f51",
+      "border": "#5b5c5e",
+      "textPrimary": "#e3e6eb",
+      "textMuted": "#949699",
+      "accent": "#7eddd3",
+      "accentSoft": "#6ba19d"
+    }
+  },
+  {
+    "id": "modern-dolch-light",
+    "name": "Modern Dolch Light",
+    "basedOn": "modern_dolch_light",
+    "tone": "light",
+    "description": "Stone grey base with mint legends.",
+    "colors": {
+      "background": "#dbdbdb",
+      "surface": "#cccccc",
+      "surfaceAlt": "#bababa",
+      "border": "#ababab",
+      "textPrimary": "#454545",
+      "textMuted": "#868686",
+      "accent": "#8fd1c3",
+      "accentSoft": "#9cc0b9"
+    }
+  },
+  {
+    "id": "mint",
+    "name": "Deep Mint",
+    "basedOn": "mint",
+    "tone": "dark",
+    "description": "Ocean navy canvas with saturated mint strokes.",
+    "colors": {
+      "background": "#05385b",
+      "surface": "#194868",
+      "surfaceAlt": "#2d5875",
+      "border": "#3c647f",
+      "textPrimary": "#edf5e1",
+      "textMuted": "#9a9f92",
+      "accent": "#5cdb95",
+      "accentSoft": "#41a790"
+    }
+  },
+  {
+    "id": "moonlight",
+    "name": "Moonlight",
+    "basedOn": "moonlight",
+    "tone": "dark",
+    "description": "Blue hour neutrals with brass highlights.",
+    "colors": {
+      "background": "#191f28",
+      "surface": "#2b3139",
+      "surfaceAlt": "#3e434a",
+      "border": "#4c5057",
+      "textPrimary": "#ccccb5",
+      "textMuted": "#858576",
+      "accent": "#c69f68",
+      "accentSoft": "#8f806e"
+    }
+  },
+  {
+    "id": "sunset",
+    "name": "Sunset",
+    "basedOn": "sunset",
+    "tone": "dark",
+    "description": "Dusty plum sky with coral glow accents.",
+    "colors": {
+      "background": "#211e24",
+      "surface": "#333036",
+      "surfaceAlt": "#454247",
+      "border": "#525054",
+      "textPrimary": "#f4e0c9",
+      "textMuted": "#9f9283",
+      "accent": "#f79777",
+      "accentSoft": "#b17a81"
+    }
+  },
+  {
+    "id": "terminal",
+    "name": "Terminal",
+    "basedOn": "terminal",
+    "tone": "dark",
+    "description": "Matte console blacks with phosphor green text.",
+    "colors": {
+      "background": "#191a1b",
+      "surface": "#2b2c2d",
+      "surfaceAlt": "#3e3f3f",
+      "border": "#4c4c4d",
+      "textPrimary": "#e7eae0",
+      "textMuted": "#969892",
+      "accent": "#79a617",
+      "accentSoft": "#637c2e"
+    }
+  },
+  {
+    "id": "witch-girl",
+    "name": "Witch Girl",
+    "basedOn": "witch_girl",
+    "tone": "light",
+    "description": "Soft rose paper with forest ink.",
+    "colors": {
+      "background": "#f3dbda",
+      "surface": "#e2cccb",
+      "surfaceAlt": "#cfbab9",
+      "border": "#beabaa",
+      "textPrimary": "#56786a",
+      "textMuted": "#91a79e",
+      "accent": "#56786a",
+      "accentSoft": "#939385"
+    }
+  },
+  {
+    "id": "rose-pine",
+    "name": "Rose Pine",
+    "basedOn": "rose_pine",
+    "tone": "dark",
+    "description": "Cozy spruce tones with lavender haze.",
+    "colors": {
+      "background": "#1f1d27",
+      "surface": "#312f38",
+      "surfaceAlt": "#43414a",
+      "border": "#504f57",
+      "textPrimary": "#e0def4",
+      "textMuted": "#92909f",
+      "accent": "#9ccfd8",
+      "accentSoft": "#aebddf"
+    }
+  },
+  {
+    "id": "rose-pine-moon",
+    "name": "Rose Pine Moon",
+    "basedOn": "rose_pine_moon",
+    "tone": "dark",
+    "description": "Moonlit variant with deeper violets.",
+    "colors": {
+      "background": "#2a273f",
+      "surface": "#3b384e",
+      "surfaceAlt": "#4c4a5e",
+      "border": "#595769",
+      "textPrimary": "#e0def4",
+      "textMuted": "#92909f",
+      "accent": "#9ccfd8",
+      "accentSoft": "#aebddf"
+    }
+  },
+  {
+    "id": "rose-pine-dawn",
+    "name": "Rose Pine Dawn",
+    "basedOn": "rose_pine_dawn",
+    "tone": "light",
+    "description": "Gentle daylight pastel version of Rose Pine.",
+    "colors": {
+      "background": "#fffaf3",
+      "surface": "#ede8e2",
+      "surfaceAlt": "#d9d5cf",
+      "border": "#c7c3be",
+      "textPrimary": "#286983",
+      "textMuted": "#739eae",
+      "accent": "#56949f",
+      "accentSoft": "#889dbf"
+    }
+  },
+  {
+    "id": "vscode",
+    "name": "VS Code",
+    "basedOn": "vscode",
+    "tone": "dark",
+    "description": "Editor-friendly greys with azure selection.",
+    "colors": {
+      "background": "#1e1e1e",
+      "surface": "#303030",
+      "surfaceAlt": "#424242",
+      "border": "#505050",
+      "textPrimary": "#d4d4d4",
+      "textMuted": "#8a8a8a",
+      "accent": "#007acc",
+      "accentSoft": "#236693"
+    }
+  },
+  {
+    "id": "everblush",
+    "name": "Everblush",
+    "basedOn": "everblush",
+    "tone": "dark",
+    "description": "Soft charcoal with botanical greens.",
+    "colors": {
+      "background": "#141b1e",
+      "surface": "#272d30",
+      "surfaceAlt": "#3a3f42",
+      "border": "#484d50",
+      "textPrimary": "#dadada",
+      "textMuted": "#8e8e8e",
+      "accent": "#8ccf7e",
+      "accentSoft": "#88af82"
+    }
+  }
+]
