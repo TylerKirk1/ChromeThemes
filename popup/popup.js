@@ -1,318 +1,135 @@
-const DEFAULT_THEME_ID = "serika-dark";
-const DEFAULT_BLEND = 0.9;
+import { THEMES } from "./themes.js";
 
-const state = {
-  catalog: [],
-  host: null,
-  normalizedHost: null,
-  scope: "global",
-  settings: null,
-  favoritesOnly: false,
-  search: "",
-  currentThemeId: DEFAULT_THEME_ID,
-  currentBlend: DEFAULT_BLEND,
+const DEFAULTS = {
+  enabled: true,
+  theme: null,
+  custom: { id: "custom", name: "Custom", bg: "#24262b", text: "#e3e1da", accent: "#f0a64a" },
+  accentMode: "theme",
+  disabledSites: [],
+  siteThemes: {}
 };
 
-const dom = {
-  sitePill: document.getElementById("sitePill"),
-  scopeInputs: document.querySelectorAll('input[name="scope"]'),
-  siteScopeOption: document.getElementById("siteScopeOption"),
-  clearSiteBtn: document.getElementById("clearSiteTheme"),
-  blendSlider: document.getElementById("blendSlider"),
-  blendValue: document.getElementById("blendValue"),
-  searchInput: document.getElementById("themeSearch"),
-  favoritesOnly: document.getElementById("favoritesOnly"),
-  themeGrid: document.getElementById("themeGrid"),
-  emptyState: document.getElementById("emptyState"),
-  template: document.getElementById("themeCardTemplate"),
-};
+const $ = (id) => document.getElementById(id);
+let settings;
+let host = null;
 
-const normalizeHost = (host) => (host || "").toLowerCase().replace(/^www\./, "");
-
-async function loadCatalog() {
-  const res = await fetch(chrome.runtime.getURL("themes/catalog.json"));
-  return res.json();
-}
-
-async function getActiveTabHost() {
-  const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
-  const tab = tabs[0];
+async function activeHost() {
+  const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
   try {
     const url = new URL(tab?.url ?? "");
-    if (url.protocol === "chrome:" || url.protocol === "edge:" || url.hostname === "chrome.google.com") {
-      return null;
-    }
-    return url.hostname;
+    if (!/^https?:$|^file:$/.test(url.protocol) || /^(chrome|chromewebstore)\.google\.com$/.test(url.hostname)) return null;
+    return url.hostname.replace(/^www\./, "") || null;
   } catch {
     return null;
   }
 }
 
-async function loadSettings() {
-  const stored = await chrome.storage.sync.get({
-    selectedThemeId: DEFAULT_THEME_ID,
-    blend: DEFAULT_BLEND,
-    applyScope: "global",
-    perHostThemes: {},
-    favorites: [],
-  });
-  return stored;
+const save = (patch) => {
+  settings = { ...settings, ...patch };
+  return chrome.storage.sync.set(patch);
+};
+
+const pick = ({ id, name, bg, text, accent }) => ({ id, name, bg, text, accent });
+
+/** The theme shown as selected: this site's own one if it has one, else the global one. */
+const currentTheme = () => (host && settings.siteThemes[host]) || settings.theme;
+
+async function chooseTheme(theme) {
+  const t = pick(theme);
+  if ($("siteOnly").checked && host) await save({ siteThemes: { ...settings.siteThemes, [host]: t } });
+  else await save({ theme: t, enabled: true });
+  render();
 }
 
-function getActiveThemeId() {
-  if (state.scope === "site" && state.normalizedHost) {
-    return state.settings.perHostThemes?.[state.normalizedHost]?.themeId ?? state.settings.selectedThemeId;
-  }
-  return state.settings.selectedThemeId;
-}
+// ── Rendering ────────────────────────────────────────────────────────────
 
-function getActiveBlend() {
-  if (state.scope === "site" && state.normalizedHost) {
-    return state.settings.perHostThemes?.[state.normalizedHost]?.blend ?? state.settings.blend;
-  }
-  return state.settings.blend;
-}
-
-function updateSitePill() {
-  if (!state.host) {
-    dom.sitePill.textContent = "Unavailable";
-    dom.siteScopeOption.classList.add("disabled");
-    dom.siteScopeOption.querySelector("input").disabled = true;
-    dom.clearSiteBtn.disabled = true;
-    return;
-  }
-  dom.sitePill.textContent = state.host;
-  dom.siteScopeOption.classList.remove("disabled");
-  dom.siteScopeOption.querySelector("input").disabled = false;
-  const hasOverride = Boolean(state.settings.perHostThemes?.[state.normalizedHost]);
-  dom.clearSiteBtn.disabled = !hasOverride;
-}
-
-function updateBlendUI() {
-  dom.blendSlider.value = state.currentBlend.toFixed(2);
-  dom.blendValue.textContent = `${Math.round(state.currentBlend * 100)}%`;
-}
-
-function updateScopeUI() {
-  dom.scopeInputs.forEach((input) => {
-    input.checked = input.value === state.scope;
-  });
-}
-
-function filterCatalog() {
-  const query = state.search.trim().toLowerCase();
-  const favorites = new Set(state.settings.favorites ?? []);
-  return state.catalog
-    .filter((theme) => {
-      if (state.favoritesOnly && !favorites.has(theme.id)) {
-        return false;
-      }
-      if (!query) return true;
-      return (
-        theme.name.toLowerCase().includes(query) ||
-        theme.id.toLowerCase().includes(query) ||
-        theme.description.toLowerCase().includes(query)
-      );
-    })
-    .sort((a, b) => {
-      const aFav = favorites.has(a.id) ? 1 : 0;
-      const bFav = favorites.has(b.id) ? 1 : 0;
-      if (aFav !== bFav) {
-        return bFav - aFav;
-      }
-      return a.name.localeCompare(b.name);
-    });
-}
-
-function renderThemes() {
-  const favorites = new Set(state.settings.favorites ?? []);
-  const filtered = filterCatalog();
-  dom.themeGrid.replaceChildren();
-
-  filtered.forEach((theme) => {
-    const node = dom.template.content.firstElementChild.cloneNode(true);
-    node.dataset.themeId = theme.id;
-    node.querySelector(".theme-name").textContent = theme.name;
-    node.querySelector(".theme-desc").textContent = theme.description;
-    node.querySelector(".swatch.bg").style.background = theme.colors.background;
-    node.querySelector(".swatch.surface").style.background = theme.colors.surface;
-    node.querySelector(".swatch.accent").style.background = theme.colors.accent;
-    const favBtn = node.querySelector(".favorite");
-    if (favorites.has(theme.id)) {
-      favBtn.classList.add("active");
-      favBtn.querySelector("span").textContent = "★";
-    } else {
-      favBtn.querySelector("span").textContent = "☆";
-    }
-    favBtn.addEventListener("click", (event) => {
-      event.stopPropagation();
-      void toggleFavorite(theme.id, favBtn);
-    });
-
-    node.addEventListener("click", () => {
-      void handleThemeSelection(theme.id);
-    });
-
-    if (state.currentThemeId === theme.id) {
-      node.classList.add("active");
-    }
-
-    dom.themeGrid.appendChild(node);
-  });
-
-  dom.emptyState.hidden = filtered.length > 0;
-}
-
-async function toggleFavorite(themeId, button) {
-  const favorites = new Set(state.settings.favorites ?? []);
-  if (favorites.has(themeId)) {
-    favorites.delete(themeId);
-  } else {
-    favorites.add(themeId);
-  }
-  state.settings.favorites = Array.from(favorites);
-  await chrome.storage.sync.set({ favorites: state.settings.favorites });
-  button.classList.toggle("active", favorites.has(themeId));
-  button.querySelector("span").textContent = favorites.has(themeId) ? "★" : "☆";
-  renderThemes();
-}
-
-async function handleThemeSelection(themeId) {
-  const updates = {};
-  if (state.scope === "site" && state.normalizedHost) {
-    const perHost = { ...(state.settings.perHostThemes ?? {}) };
-    perHost[state.normalizedHost] = {
-      themeId,
-      blend: state.currentBlend,
-    };
-    updates.perHostThemes = perHost;
-  } else {
-    updates.selectedThemeId = themeId;
-  }
-  updates.applyScope = state.scope;
-  await chrome.storage.sync.set(updates);
-  state.settings = {
-    ...state.settings,
-    ...updates,
-    perHostThemes: updates.perHostThemes ?? state.settings.perHostThemes,
-  };
-  state.currentThemeId = themeId;
-  updateSitePill();
-  renderThemes();
-  await notifyActiveTab(themeId, state.currentBlend);
-}
-
-async function notifyActiveTab(themeId, blend) {
-  const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
-  const tab = tabs[0];
-  if (!tab?.id) return;
-  try {
-    await chrome.tabs.sendMessage(tab.id, {
-      type: "MONKEY_APPLY_THEME",
-      themeId,
-      blend,
-    });
-  } catch {
-    // likely a restricted page, ignore
+function renderGrid() {
+  const grid = $("grid");
+  grid.replaceChildren();
+  const selected = currentTheme()?.id;
+  for (const theme of [...THEMES, settings.custom]) {
+    const node = $("card").content.firstElementChild.cloneNode(true);
+    node.querySelector(".card__swatch").style.background = theme.bg;
+    node.querySelector(".card__aa").style.color = theme.text;
+    node.querySelector(".card__dot").style.background = theme.accent;
+    node.querySelector(".card__name").textContent = theme.name;
+    node.title = theme.name;
+    node.setAttribute("aria-pressed", String(theme.id === selected));
+    node.addEventListener("click", () => chooseTheme(theme));
+    grid.append(node);
   }
 }
 
-async function updateBlend(value) {
-  state.currentBlend = Number(value);
-  updateBlendUI();
-  if (state.scope === "site" && state.normalizedHost) {
-    const perHost = { ...(state.settings.perHostThemes ?? {}) };
-    const current = perHost[state.normalizedHost] ?? {
-      themeId: state.currentThemeId,
-    };
-    perHost[state.normalizedHost] = {
-      ...current,
-      blend: state.currentBlend,
-    };
-    state.settings.perHostThemes = perHost;
-    await chrome.storage.sync.set({ perHostThemes: perHost });
-  } else {
-    state.settings.blend = state.currentBlend;
-    await chrome.storage.sync.set({ blend: state.currentBlend });
+function renderCustom() {
+  const isCustom = currentTheme()?.id === "custom";
+  $("custom").hidden = !isCustom;
+  if (!isCustom) return;
+  const { bg, text, accent } = settings.custom;
+  $("cBg").value = bg;
+  $("cText").value = text;
+  $("cAccent").value = accent;
+  const ratio = CTColor.contrast(CTColor.parse(bg), CTColor.parse(text));
+  $("contrastNote").textContent =
+    ratio < 4.5 ? `Text contrast is ${ratio.toFixed(1)}:1. Aim for at least 4.5:1 so pages stay readable.` : `Text contrast ${ratio.toFixed(1)}:1`;
+  $("contrastNote").classList.toggle("warn", ratio < 4.5);
+}
+
+function render() {
+  $("enabled").checked = settings.enabled;
+  document.body.classList.toggle("off", !settings.enabled);
+
+  $("siteRow").hidden = !host;
+  $("restricted").hidden = !!host;
+  $("siteOnlyRow").hidden = !host;
+  if (host) {
+    $("host").textContent = host;
+    $("siteEnabled").checked = !settings.disabledSites.includes(host);
+    $("siteOnly").checked = !!settings.siteThemes[host];
   }
-  await notifyActiveTab(state.currentThemeId, state.currentBlend);
+  for (const b of document.querySelectorAll("[data-accent]")) b.setAttribute("aria-checked", String(b.dataset.accent === settings.accentMode));
+  renderGrid();
+  renderCustom();
 }
 
-async function handleScopeChange(value) {
-  if (value === "site" && !state.host) {
-    updateScopeUI();
-    return;
-  }
-  state.scope = value;
-  state.settings.applyScope = value;
-  await chrome.storage.sync.set({ applyScope: value });
-  state.currentThemeId = getActiveThemeId();
-  state.currentBlend = getActiveBlend();
-  updateBlendUI();
-  updateScopeUI();
-  updateSitePill();
-  renderThemes();
-  await notifyActiveTab(state.currentThemeId, state.currentBlend);
+// ── Events ───────────────────────────────────────────────────────────────
+
+$("enabled").addEventListener("change", (e) => save({ enabled: e.target.checked }).then(render));
+
+$("siteEnabled").addEventListener("change", (e) => {
+  const others = settings.disabledSites.filter((h) => h !== host);
+  save({ disabledSites: e.target.checked ? others : [...others, host] }).then(render);
+});
+
+$("siteOnly").addEventListener("change", (e) => {
+  const siteThemes = { ...settings.siteThemes };
+  if (e.target.checked) siteThemes[host] = currentTheme() ?? pick(THEMES[0]);
+  else delete siteThemes[host];
+  save({ siteThemes }).then(render);
+});
+
+for (const b of document.querySelectorAll("[data-accent]")) {
+  b.addEventListener("click", () => save({ accentMode: b.dataset.accent }).then(render));
 }
 
-async function clearSiteOverride() {
-  if (!state.normalizedHost) return;
-  const perHost = { ...(state.settings.perHostThemes ?? {}) };
-  delete perHost[state.normalizedHost];
-  state.settings.perHostThemes = perHost;
-  await chrome.storage.sync.set({ perHostThemes: perHost });
-  state.currentThemeId = getActiveThemeId();
-  state.currentBlend = getActiveBlend();
-  updateSitePill();
-  updateBlendUI();
-  renderThemes();
-  await notifyActiveTab(state.currentThemeId, state.currentBlend);
-}
-
-function bindControls() {
-  dom.scopeInputs.forEach((input) => {
-    input.addEventListener("change", (event) => {
-      void handleScopeChange(event.target.value);
-    });
-  });
-  dom.clearSiteBtn.addEventListener("click", () => {
-    void clearSiteOverride();
-  });
-  dom.blendSlider.addEventListener("input", (event) => {
-    void updateBlend(event.target.value);
-  });
-  dom.searchInput.addEventListener("input", (event) => {
-    state.search = event.target.value;
-    renderThemes();
-  });
-  dom.favoritesOnly.addEventListener("change", (event) => {
-    state.favoritesOnly = event.target.checked;
-    renderThemes();
+// Custom colors apply live while dragging, but storage writes are throttled
+// (chrome.storage.sync allows only a couple of writes per second).
+let pendingCustom = 0;
+for (const [id, key] of [["cBg", "bg"], ["cText", "text"], ["cAccent", "accent"]]) {
+  $(id).addEventListener("input", (e) => {
+    settings.custom = { ...settings.custom, [key]: e.target.value };
+    renderCustom();
+    clearTimeout(pendingCustom);
+    pendingCustom = setTimeout(() => {
+      const custom = settings.custom;
+      const patch = { custom };
+      if (host && settings.siteThemes[host]?.id === "custom") patch.siteThemes = { ...settings.siteThemes, [host]: custom };
+      else patch.theme = custom;
+      save(patch).then(renderGrid);
+    }, 250);
   });
 }
 
-async function init() {
-  const [catalog, host, settings] = await Promise.all([
-    loadCatalog(),
-    getActiveTabHost(),
-    loadSettings(),
-  ]);
-  state.catalog = catalog;
-  state.host = host;
-  state.normalizedHost = normalizeHost(host);
-  state.settings = settings;
-  const desiredScope = settings.applyScope === "site" && host ? "site" : "global";
-  state.scope = desiredScope;
-  state.currentThemeId = getActiveThemeId();
-  state.currentBlend = getActiveBlend();
-  state.search = "";
-  state.favoritesOnly = false;
+// ── Start ────────────────────────────────────────────────────────────────
 
-  bindControls();
-  updateScopeUI();
-  updateBlendUI();
-  updateSitePill();
-  renderThemes();
-}
-
-void init();
+[settings, host] = await Promise.all([chrome.storage.sync.get(DEFAULTS), activeHost()]);
+render();

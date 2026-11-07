@@ -1,43 +1,15 @@
-Monkeytype Universal Theme Selector (Chrome Extension)
-=====================================================
+# ChromeThemes
 
-This small Chrome extension lets you apply Monkeytype-inspired palettes to any website. It reuses the tone of the original Monkeytype themes but injects neutral CSS variables and overlays so the colors work across most document, dashboard, blog, or app layouts.
+A Chrome extension that recolors any website with a theme you pick or make yourself.
 
-Features
---------
+Rather than painting a tint over the page, it reads each site's own stylesheets and writes a matching set where every color is remapped onto the theme: backgrounds land near the theme background, text near the theme text, and colorful elements keep their meaning at a readable brightness (or take the theme's accent). Only colors change, so layouts never break, and it works on light and dark sites alike.
 
-- **20+ curated palettes** (Serika, Nord, Dracula, Rose Pine, etc.) defined in [`themes/catalog.json`](themes/catalog.json). Each theme contains a background, layered surfaces, text, and accent colors derived from the Monkeytype repo.
-- **Global or per-site scope** – pick a theme for every site or override a specific domain with its own palette plus blend amount.
-- **Live blend slider** – control how strong the overlay is so light sites stay readable and dark sites do not go fully black.
-- **Favorites + search** – star your favorite looks and quickly filter the catalog.
-- **Automatic persistence** – selections are stored via `chrome.storage.sync` so they roam with your Chrome profile.
+14 built-in themes, a custom theme editor, and per-site on/off and theme overrides.
 
-Project Structure
------------------
+## Install
 
-```
-chromeThemes/
-├── assets/                # Extension icons
-├── background.js          # Initializes default settings on install
-├── content/content.js     # Injects CSS variables and updates when storage changes
-├── manifest.json          # Chrome manifest v3 definition
-├── popup/                 # Popup UI (HTML, CSS, JS)
-├── themes/catalog.json    # Theme catalog used by popup + content script
-└── README.md
-```
+1. Open `chrome://extensions` and turn on **Developer mode**.
+2. Click **Load unpacked** and choose this folder.
+3. Pin ChromeThemes to the toolbar and pick a theme.
 
-Getting Started
----------------
-
-1. Open `chrome://extensions` in Chrome.
-2. Enable **Developer mode** (top-right).
-3. Click **Load unpacked** and select the `chromeThemes` folder from this repository.
-4. Pin the extension to your toolbar and open it on any site to start swapping palettes.
-
-Notes
------
-
-- The styling approach relies on `color-mix()` which is available in Chromium-based browsers ≥111. Older versions will gracefully ignore the rule but fall back to less accurate colors.
-- Highly customized apps may override the injected CSS with dominant `!important` rules. Increase the blend strength slider to push the overlay harder, or assign a site-specific palette.
-
-Feel free to extend the catalog with more themes from `frontend/static/themes/*.css` or tweak the popup to match your own workflow.
+Chrome doesn't allow extensions on its own pages (`chrome://`, the Web Store, the PDF viewer), so those stay unthemed.

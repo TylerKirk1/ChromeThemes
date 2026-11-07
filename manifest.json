@@ -1,38 +1,36 @@
 {
   "manifest_version": 3,
-  "name": "Monkeytype Universal Theme Selector",
-  "description": "Apply Monkeytype-inspired palettes to any site with a universal theme overlay and quick selector.",
-  "version": "0.1.0",
+  "name": "ChromeThemes",
+  "description": "Recolor any website with a theme you pick or make yourself.",
+  "version": "1.0.0",
   "icons": {
     "16": "assets/icon-16.png",
     "48": "assets/icon-48.png",
     "128": "assets/icon-128.png"
   },
-  "permissions": [
-    "storage",
-    "tabs"
-  ],
-  "host_permissions": [
-    "<all_urls>"
-  ],
+  "permissions": ["storage"],
+  "host_permissions": ["<all_urls>"],
   "background": {
     "service_worker": "background.js"
   },
   "action": {
-    "default_title": "Monkeytype Themes",
+    "default_title": "ChromeThemes",
     "default_popup": "popup/popup.html"
   },
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["content/content.js"],
-      "run_at": "document_idle"
-    }
-  ],
-  "web_accessible_resources": [
+      "js": ["src/color.js", "src/engine.js", "src/content.js"],
+      "run_at": "document_start",
+      "all_frames": true,
+      "match_about_blank": true
+    },
     {
-      "resources": ["themes/catalog.json"],
-      "matches": ["<all_urls>"]
+      "matches": ["<all_urls>"],
+      "js": ["src/hook.js"],
+      "run_at": "document_start",
+      "all_frames": true,
+      "world": "MAIN"
     }
   ]
 }
