@@ -6,6 +6,8 @@ Rather than painting a tint over the page, it reads each site's own stylesheets 
 
 14 built-in themes, a custom theme editor, and per-site on/off and theme overrides.
 
+**Effects (beta):** glass buttons, either frosted or "liquid" (a lens that bends what's behind the button, using Chrome's SVG backdrop filters), and an ombre gradient behind the page. Fixed headers, menus and dialogs stay solid so text never overlaps.
+
 ## Install
 
 1. Open `chrome://extensions` and turn on **Developer mode**.

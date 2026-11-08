@@ -39,6 +39,35 @@
     </section>
 
     <section class="options">
+      <h2>Effects</h2>
+      <div class="row">
+        <span>Glass buttons <span class="beta">Beta</span></span>
+        <div class="segmented" role="radiogroup" aria-label="Glass buttons">
+          <button type="button" data-glass="off" role="radio">Off</button>
+          <button type="button" data-glass="frosted" role="radio">Frosted</button>
+          <button type="button" data-glass="liquid" role="radio">Liquid</button>
+        </div>
+      </div>
+      <div class="row">
+        <span>Ombre background <span class="beta">Beta</span></span>
+        <label class="switch" title="Gradient behind the page">
+          <input type="checkbox" id="ombre" />
+          <span></span>
+        </label>
+      </div>
+      <div class="ombre" id="ombreControls" hidden>
+        <label>Start <input type="color" id="ombreFrom" /></label>
+        <label>End <input type="color" id="ombreTo" /></label>
+        <div class="segmented" role="radiogroup" aria-label="Gradient direction">
+          <button type="button" data-dir="180deg" role="radio" title="Top to bottom">↓</button>
+          <button type="button" data-dir="135deg" role="radio" title="Diagonal">↘</button>
+          <button type="button" data-dir="90deg" role="radio" title="Left to right">→</button>
+        </div>
+      </div>
+      <p class="note" id="glassNote" hidden>Glass needs something behind it to bend. It looks best with the ombre on, or over images.</p>
+    </section>
+
+    <section class="options">
       <div class="row">
         <span>Colorful elements</span>
         <div class="segmented" role="radiogroup" aria-label="Colorful elements">
