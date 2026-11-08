@@ -6,7 +6,8 @@ const DEFAULTS = {
   custom: { id: "custom", name: "Custom", bg: "#24262b", text: "#e3e1da", accent: "#f0a64a" },
   accentMode: "theme",
   disabledSites: [],
-  siteThemes: {}
+  siteThemes: {},
+  effects: { glass: "off", ombre: false }
 };
 
 const $ = (id) => document.getElementById(id);
@@ -74,6 +75,28 @@ function renderCustom() {
   $("contrastNote").classList.toggle("warn", ratio < 4.5);
 }
 
+const effects = () => ({ glass: "off", ombre: false, ...settings.effects });
+const saveEffects = (patch) => save({ effects: { ...effects(), ...patch } });
+
+/** Default ombre: the theme's background fading toward its accent. */
+function ombreDefaults() {
+  const t = currentTheme() ?? THEMES[0];
+  const to = CTColor.format(CTColor.mixLab(CTColor.parse(t.bg), CTColor.parse(t.accent), 0.35));
+  return { from: t.bg, to };
+}
+
+function renderEffects() {
+  const e = effects();
+  for (const b of document.querySelectorAll("[data-glass]")) b.setAttribute("aria-checked", String(b.dataset.glass === e.glass));
+  $("ombre").checked = e.ombre;
+  $("ombreControls").hidden = !e.ombre;
+  const d = ombreDefaults();
+  $("ombreFrom").value = e.ombreFrom ?? d.from;
+  $("ombreTo").value = e.ombreTo ?? d.to;
+  for (const b of document.querySelectorAll("[data-dir]")) b.setAttribute("aria-checked", String(b.dataset.dir === (e.ombreDir ?? "180deg")));
+  $("glassNote").hidden = e.glass === "off" || e.ombre;
+}
+
 function render() {
   $("enabled").checked = settings.enabled;
   document.body.classList.toggle("off", !settings.enabled);
@@ -89,6 +112,7 @@ function render() {
   for (const b of document.querySelectorAll("[data-accent]")) b.setAttribute("aria-checked", String(b.dataset.accent === settings.accentMode));
   renderGrid();
   renderCustom();
+  renderEffects();
 }
 
 // ── Events ───────────────────────────────────────────────────────────────
@@ -109,6 +133,23 @@ $("siteOnly").addEventListener("change", (e) => {
 
 for (const b of document.querySelectorAll("[data-accent]")) {
   b.addEventListener("click", () => save({ accentMode: b.dataset.accent }).then(render));
+}
+
+for (const b of document.querySelectorAll("[data-glass]")) {
+  b.addEventListener("click", () => saveEffects({ glass: b.dataset.glass }).then(render));
+}
+for (const b of document.querySelectorAll("[data-dir]")) {
+  b.addEventListener("click", () => saveEffects({ ombreDir: b.dataset.dir }).then(render));
+}
+$("ombre").addEventListener("change", (e) => saveEffects({ ombre: e.target.checked }).then(render));
+
+let pendingOmbre = 0;
+for (const [id, key] of [["ombreFrom", "ombreFrom"], ["ombreTo", "ombreTo"]]) {
+  $(id).addEventListener("input", (e) => {
+    settings.effects = { ...effects(), [key]: e.target.value };
+    clearTimeout(pendingOmbre);
+    pendingOmbre = setTimeout(() => saveEffects({}), 250);
+  });
 }
 
 // Custom colors apply live while dragging, but storage writes are throttled
